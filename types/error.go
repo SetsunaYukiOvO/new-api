@@ -204,6 +204,10 @@ func (e *NewAPIError) ToOpenAIError() OpenAIError {
 	if e.errorCode != ErrorCodeCountTokenFailed {
 		result.Message = common.MaskSensitiveInfo(result.Message)
 	}
+	// 防透传：隐藏上游错误的详细信息
+	if common.HideUpstreamErrors && e.isUpstreamError() {
+		result.Message = e.getGenericErrorMessage()
+	}
 	if result.Message == "" {
 		result.Message = string(e.errorType)
 	}
@@ -232,6 +236,10 @@ func (e *NewAPIError) ToClaudeError() ClaudeError {
 	}
 	if e.errorCode != ErrorCodeCountTokenFailed {
 		result.Message = common.MaskSensitiveInfo(result.Message)
+	}
+	// 防透传：隐藏上游错误的详细信息
+	if common.HideUpstreamErrors && e.isUpstreamError() {
+		result.Message = e.getGenericErrorMessage()
 	}
 	if result.Message == "" {
 		result.Message = string(e.errorType)
@@ -387,6 +395,46 @@ func ErrOptionWithSkipRetry() NewAPIErrorOptions {
 func ErrOptionWithNoRecordErrorLog() NewAPIErrorOptions {
 	return func(e *NewAPIError) {
 		e.recordErrorLog = common.GetPointer(false)
+	}
+}
+
+// isUpstreamError 判断错误是否来自上游供应商
+func (e *NewAPIError) isUpstreamError() bool {
+	switch e.errorType {
+	case ErrorTypeNewAPIError:
+		// new api 自身的错误不算上游错误，但某些 error code 是上游返回的
+		switch e.errorCode {
+		case ErrorCodeBadResponseStatusCode, ErrorCodeBadResponse, ErrorCodeBadResponseBody,
+			ErrorCodeEmptyResponse, ErrorCodeDoRequestFailed, ErrorCodeAwsInvokeError,
+			ErrorCodeModelNotFound, ErrorCodePromptBlocked:
+			return true
+		}
+		return false
+	case ErrorTypeOpenAIError, ErrorTypeClaudeError, ErrorTypeGeminiError,
+		ErrorTypeUpstreamError, ErrorTypeRerankError:
+		return true
+	default:
+		return false
+	}
+}
+
+// getGenericErrorMessage 根据状态码返回通用错误消息
+func (e *NewAPIError) getGenericErrorMessage() string {
+	switch {
+	case e.StatusCode == 400:
+		return "请求参数错误，请检查请求内容"
+	case e.StatusCode == 401:
+		return "上游认证失败，请联系管理员"
+	case e.StatusCode == 403:
+		return "请求被上游拒绝，请联系管理员"
+	case e.StatusCode == 404:
+		return "请求的模型或资源不存在"
+	case e.StatusCode == 429:
+		return "请求频率超限，请稍后重试"
+	case e.StatusCode >= 500:
+		return "上游服务暂时不可用，请稍后重试"
+	default:
+		return fmt.Sprintf("请求失败 (HTTP %d)，请稍后重试", e.StatusCode)
 	}
 }
 

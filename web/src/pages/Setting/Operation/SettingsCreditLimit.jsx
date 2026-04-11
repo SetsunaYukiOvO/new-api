@@ -37,6 +37,9 @@ export default function SettingsCreditLimit(props) {
     QuotaForInviter: '',
     QuotaForInvitee: '',
     'quota_setting.enable_free_model_pre_consume': true,
+    QQWhitelistEnabled: false,
+    QQWhitelist: '',
+    QQWhitelistQuota: '',
   });
   const refForm = useRef();
   const [inputsRow, setInputsRow] = useState(inputs);
@@ -48,6 +51,13 @@ export default function SettingsCreditLimit(props) {
       let value = '';
       if (typeof inputs[item.key] === 'boolean') {
         value = String(inputs[item.key]);
+      } else if (item.key === 'QQWhitelist') {
+        // 将换行分隔的QQ号转为逗号分隔存储
+        value = inputs[item.key]
+          .split(/[\n,]/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+          .join(',');
       } else {
         value = inputs[item.key];
       }
@@ -82,6 +92,10 @@ export default function SettingsCreditLimit(props) {
       if (Object.keys(inputs).includes(key)) {
         currentInputs[key] = props.options[key];
       }
+    }
+    // 将逗号分隔的QQ号转为换行显示
+    if (currentInputs.QQWhitelist) {
+      currentInputs.QQWhitelist = currentInputs.QQWhitelist.split(',').filter(Boolean).join('\n');
     }
     setInputs(currentInputs);
     setInputsRow(structuredClone(currentInputs));
@@ -188,6 +202,63 @@ export default function SettingsCreditLimit(props) {
             <Row>
               <Button size='default' onClick={onSubmit}>
                 {t('保存额度设置')}
+              </Button>
+            </Row>
+          </Form.Section>
+
+          <Form.Section text={t('QQ白名单额度赠送')}>
+            <Row gutter={16}>
+              <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+                <Form.Switch
+                  label={t('启用QQ白名单')}
+                  field={'QQWhitelistEnabled'}
+                  extraText={t('开启后，白名单中的QQ号以QQ邮箱注册时将获得额外额度')}
+                  onChange={(value) =>
+                    setInputs({
+                      ...inputs,
+                      QQWhitelistEnabled: value,
+                    })
+                  }
+                />
+              </Col>
+              <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+                <Form.InputNumber
+                  label={t('白名单赠送额度')}
+                  field={'QQWhitelistQuota'}
+                  step={1}
+                  min={0}
+                  suffix={'Token'}
+                  extraText={t('默认$50 = 25000000')}
+                  placeholder={'25000000'}
+                  onChange={(value) =>
+                    setInputs({
+                      ...inputs,
+                      QQWhitelistQuota: String(value),
+                    })
+                  }
+                />
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                <Form.TextArea
+                  label={t('QQ号白名单')}
+                  field={'QQWhitelist'}
+                  placeholder={t('一行一个QQ号，例如：\n123456\n789012\n345678')}
+                  extraText={t('输入QQ号，一行一个，这些QQ号对应的QQ邮箱注册时将获得额外额度')}
+                  autosize={{ minRows: 5, maxRows: 20 }}
+                  onChange={(value) =>
+                    setInputs({
+                      ...inputs,
+                      QQWhitelist: value,
+                    })
+                  }
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Button size='default' onClick={onSubmit}>
+                {t('保存QQ白名单设置')}
               </Button>
             </Row>
           </Form.Section>

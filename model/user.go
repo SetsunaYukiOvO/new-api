@@ -418,6 +418,11 @@ func (user *User) Insert(inviterId int) error {
 	if common.QuotaForNewUser > 0 {
 		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送 %s", logger.LogQuota(common.QuotaForNewUser)))
 	}
+	// QQ白名单额度赠送
+	if common.IsQQWhitelisted(user.Email) {
+		_ = IncreaseUserQuota(user.Id, common.QQWhitelistQuota, true)
+		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("QQ白名单注册赠送 %s", logger.LogQuota(common.QQWhitelistQuota)))
+	}
 	if inviterId != 0 {
 		if common.QuotaForInvitee > 0 {
 			_ = IncreaseUserQuota(user.Id, common.QuotaForInvitee, true)
@@ -478,6 +483,11 @@ func (user *User) FinalizeOAuthUserCreation(inviterId int) {
 
 	if common.QuotaForNewUser > 0 {
 		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送 %s", logger.LogQuota(common.QuotaForNewUser)))
+	}
+	// QQ白名单额度赠送
+	if common.IsQQWhitelisted(user.Email) {
+		_ = IncreaseUserQuota(user.Id, common.QQWhitelistQuota, true)
+		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("QQ白名单注册赠送 %s", logger.LogQuota(common.QQWhitelistQuota)))
 	}
 	if inviterId != 0 {
 		if common.QuotaForInvitee > 0 {

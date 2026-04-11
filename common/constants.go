@@ -70,6 +70,7 @@ var EmailLoginAuthServerList = []string{
 }
 
 var DebugEnabled bool
+var HideUpstreamErrors = false // 隐藏上游错误信息，防止透传
 var MemoryCacheEnabled bool
 
 var LogConsumeEnabled = true
@@ -104,6 +105,11 @@ var TelegramBotName = ""
 var QuotaForNewUser = 0
 var QuotaForInviter = 0
 var QuotaForInvitee = 0
+
+// QQ号白名单：这些QQ号对应的QQ邮箱注册时，额外赠送 $50 额度
+var QQWhitelistEnabled = false
+var QQWhitelist = map[string]bool{} // key: QQ号 (不含@qq.com)
+var QQWhitelistQuota = int(50 * 500000) // $50
 var ChannelDisableThreshold = 5.0
 var AutomaticDisableChannelEnabled = false
 var AutomaticEnableChannelEnabled = false

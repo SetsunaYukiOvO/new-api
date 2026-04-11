@@ -179,6 +179,10 @@ func Register(c *gin.Context) {
 	if common.EmailVerificationEnabled {
 		cleanUser.Email = user.Email
 	}
+	// QQ白名单：即使未开启邮箱验证，也需要保存邮箱以便检查白名单
+	if cleanUser.Email == "" && common.QQWhitelistEnabled && user.Email != "" {
+		cleanUser.Email = user.Email
+	}
 	if err := cleanUser.Insert(inviterId); err != nil {
 		common.ApiError(c, err)
 		return
