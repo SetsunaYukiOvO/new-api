@@ -228,6 +228,13 @@ export default function GeneralSettings(props) {
       currentInputs['general_setting.custom_currency_exchange_rate'] =
         props.options['general_setting.custom_currency_exchange_rate'];
     }
+    // boolean 字段类型转换（后端返回字符串 "true"/"false"）
+    const boolFields = ['DisplayTokenStatEnabled', 'DefaultCollapseSidebar', 'DemoSiteEnabled', 'SelfUseModeEnabled', 'HideUpstreamErrors'];
+    for (const field of boolFields) {
+      if (typeof currentInputs[field] === 'string') {
+        currentInputs[field] = currentInputs[field] === 'true';
+      }
+    }
     setInputs(currentInputs);
     setInputsRow(structuredClone(currentInputs));
     refForm.current.setValues(currentInputs);

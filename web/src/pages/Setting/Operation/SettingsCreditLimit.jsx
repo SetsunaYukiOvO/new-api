@@ -97,6 +97,13 @@ export default function SettingsCreditLimit(props) {
     if (currentInputs.QQWhitelist) {
       currentInputs.QQWhitelist = currentInputs.QQWhitelist.split(',').filter(Boolean).join('\n');
     }
+    // boolean 字段类型转换（后端返回字符串 "true"/"false"）
+    if (typeof currentInputs.QQWhitelistEnabled === 'string') {
+      currentInputs.QQWhitelistEnabled = currentInputs.QQWhitelistEnabled === 'true';
+    }
+    if (typeof currentInputs['quota_setting.enable_free_model_pre_consume'] === 'string') {
+      currentInputs['quota_setting.enable_free_model_pre_consume'] = currentInputs['quota_setting.enable_free_model_pre_consume'] === 'true';
+    }
     setInputs(currentInputs);
     setInputsRow(structuredClone(currentInputs));
     refForm.current.setValues(currentInputs);
