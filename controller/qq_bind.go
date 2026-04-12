@@ -250,6 +250,14 @@ func QQBindVerify(c *gin.Context) {
 
 // QQUnbind unbinds QQ from the current user
 func QQUnbind(c *gin.Context) {
+	if common.QQUnbindDisabled {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "管理员已禁止解绑QQ",
+		})
+		return
+	}
+
 	session := sessions.Default(c)
 	userId := session.Get("id").(int)
 

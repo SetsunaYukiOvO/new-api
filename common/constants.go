@@ -110,6 +110,7 @@ var QuotaForInvitee = 0
 var QQWhitelistEnabled = false
 var QQWhitelist = map[string]bool{} // key: QQ号 (不含@qq.com)
 var QQWhitelistQuota = int(50 * 500000) // $50
+var QQUnbindDisabled = false
 var ChannelDisableThreshold = 5.0
 var AutomaticDisableChannelEnabled = false
 var AutomaticEnableChannelEnabled = false

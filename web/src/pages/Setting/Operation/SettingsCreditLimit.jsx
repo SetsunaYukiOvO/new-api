@@ -40,6 +40,7 @@ export default function SettingsCreditLimit(props) {
     QQWhitelistEnabled: false,
     QQWhitelist: '',
     QQWhitelistQuota: '',
+    QQUnbindDisabled: false,
   });
   const refForm = useRef();
   const [inputsRow, setInputsRow] = useState(inputs);
@@ -100,6 +101,9 @@ export default function SettingsCreditLimit(props) {
     // boolean 字段类型转换（后端返回字符串 "true"/"false"）
     if (typeof currentInputs.QQWhitelistEnabled === 'string') {
       currentInputs.QQWhitelistEnabled = currentInputs.QQWhitelistEnabled === 'true';
+    }
+    if (typeof currentInputs.QQUnbindDisabled === 'string') {
+      currentInputs.QQUnbindDisabled = currentInputs.QQUnbindDisabled === 'true';
     }
     if (typeof currentInputs['quota_setting.enable_free_model_pre_consume'] === 'string') {
       currentInputs['quota_setting.enable_free_model_pre_consume'] = currentInputs['quota_setting.enable_free_model_pre_consume'] === 'true';
@@ -224,6 +228,19 @@ export default function SettingsCreditLimit(props) {
                     setInputs({
                       ...inputs,
                       QQWhitelistEnabled: value,
+                    })
+                  }
+                />
+              </Col>
+              <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+                <Form.Switch
+                  label={t('禁止解绑QQ')}
+                  field={'QQUnbindDisabled'}
+                  extraText={t('开启后，用户绑定QQ后将无法自行解绑')}
+                  onChange={(value) =>
+                    setInputs({
+                      ...inputs,
+                      QQUnbindDisabled: value,
                     })
                   }
                 />
