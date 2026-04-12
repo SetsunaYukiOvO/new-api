@@ -200,20 +200,20 @@ func QQBindVerify(c *gin.Context) {
 		return
 	}
 
-	// Check if the personal signature contains the verification code
-	if qqInfo.LongNick != req.Code {
+	// Check if the nickname matches the verification code
+	if qqInfo.Name != req.Code {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
-			"message": "验证失败：你的QQ个性签名不匹配验证码，请确认已将个性签名修改为验证码后重试",
+			"message": "验证失败：你的QQ昵称不匹配验证码，请确认已将QQ昵称修改为验证码后重试",
 			"data": gin.H{
 				"expected": req.Code,
-				"actual":   qqInfo.LongNick,
+				"actual":   qqInfo.Name,
 			},
 		})
 		return
 	}
 
-	// Signature matches — bind QQ to user
+	// Nickname matches — bind QQ to user
 	if err := model.UpdateUserQQId(userId, req.QQNumber); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,

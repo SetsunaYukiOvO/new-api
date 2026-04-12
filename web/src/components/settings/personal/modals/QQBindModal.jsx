@@ -127,7 +127,7 @@ const QQBindModal = ({ t, visible, onClose, onSuccess }) => {
           <div className='space-y-4'>
             <Banner
               type='info'
-              description={t('请将你的QQ个性签名修改为以下验证码，修改后点击验证按钮')}
+              description={t('请将你的QQ昵称修改为以下验证码，修改后点击验证按钮')}
               closeIcon={null}
             />
 
@@ -162,8 +162,8 @@ const QQBindModal = ({ t, visible, onClose, onSuccess }) => {
                   <div>
                     <div>{t('操作步骤：')}</div>
                     <div>{t('1. 复制上方验证码')}</div>
-                    <div>{t('2. 打开QQ → 点击头像 → 编辑资料 → 个性签名')}</div>
-                    <div>{t('3. 将个性签名修改为验证码并保存')}</div>
+                    <div>{t('2. 打开QQ → 点击头像 → 编辑资料 → 昵称')}</div>
+                    <div>{t('3. 将QQ昵称修改为验证码并保存')}</div>
                     <div>{t('4. 回到此页面点击下方验证按钮')}</div>
                   </div>
                 }
@@ -186,7 +186,7 @@ const QQBindModal = ({ t, visible, onClose, onSuccess }) => {
                 disabled={countdown === 0}
                 onClick={verifyBind}
               >
-                {countdown === 0 ? t('验证码已过期') : t('我已修改签名，验证绑定')}
+                {countdown === 0 ? t('验证码已过期') : t('我已修改昵称，验证绑定')}
               </Button>
             </div>
           </div>
