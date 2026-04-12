@@ -25,12 +25,18 @@ type qqBindVerifyRequest struct {
 }
 
 type uapisQQUserInfoResponse struct {
-	Code      int    `json:"code"`
-	QQ        string `json:"qq"`
-	Name      string `json:"name"`
-	QQLevel   string `json:"qqlevel"`
-	Avatar    string `json:"avatar"`
-	LongNick  string `json:"long_nick"`
+	QQ       string `json:"qq"`
+	Nickname string `json:"nickname"`
+	LongNick string `json:"long_nick"`
+	Avatar   string `json:"avatar_url"`
+	Age      int    `json:"age"`
+	Sex      string `json:"sex"`
+	Qid      string `json:"qid"`
+	QQLevel  *int   `json:"qq_level"`
+	Location string `json:"location"`
+	Email    string `json:"email"`
+	IsVip    bool   `json:"is_vip"`
+	VipLevel int    `json:"vip_level"`
 }
 
 // QQBindGenerateCode generates a verification code for QQ binding
@@ -201,13 +207,13 @@ func QQBindVerify(c *gin.Context) {
 	}
 
 	// Check if the nickname matches the verification code
-	if qqInfo.Name != req.Code {
+	if qqInfo.Nickname != req.Code {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
 			"message": "验证失败：你的QQ昵称不匹配验证码，请确认已将QQ昵称修改为验证码后重试",
 			"data": gin.H{
 				"expected": req.Code,
-				"actual":   qqInfo.Name,
+				"actual":   qqInfo.Nickname,
 			},
 		})
 		return

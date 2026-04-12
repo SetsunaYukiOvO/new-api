@@ -128,6 +128,7 @@ func InitOptionMap() {
 	common.OptionMap["QQWhitelist"] = common.QQWhitelistToString()
 	common.OptionMap["QQWhitelistQuota"] = strconv.Itoa(common.QQWhitelistQuota)
 	common.OptionMap["QQUnbindDisabled"] = strconv.FormatBool(common.QQUnbindDisabled)
+	common.OptionMap["UapisApiKey"] = common.UapisApiKey
 	common.OptionMap["QuotaRemindThreshold"] = strconv.Itoa(common.QuotaRemindThreshold)
 	common.OptionMap["PreConsumedQuota"] = strconv.Itoa(common.PreConsumedQuota)
 	common.OptionMap["ModelRequestRateLimitCount"] = strconv.Itoa(setting.ModelRequestRateLimitCount)
@@ -460,6 +461,8 @@ func updateOptionMap(key string, value string) (err error) {
 		common.QQWhitelistQuota, _ = strconv.Atoi(value)
 	case "QQUnbindDisabled":
 		common.QQUnbindDisabled = value == "true"
+	case "UapisApiKey":
+		common.UapisApiKey = value
 	case "QuotaRemindThreshold":
 		common.QuotaRemindThreshold, _ = strconv.Atoi(value)
 	case "PreConsumedQuota":
