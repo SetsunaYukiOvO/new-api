@@ -50,6 +50,7 @@ type User struct {
 	Setting          string         `json:"setting" gorm:"type:text;column:setting"`
 	Remark           string         `json:"remark,omitempty" gorm:"type:varchar(255)" validate:"max=255"`
 	StripeCustomer   string         `json:"stripe_customer" gorm:"type:varchar(64);column:stripe_customer;index"`
+	QQId             string         `json:"qq_id" gorm:"type:varchar(20);column:qq_id;index"`
 }
 
 func (user *User) ToBaseUser() *UserBase {
@@ -708,6 +709,14 @@ func IsOidcIdAlreadyTaken(oidcId string) bool {
 
 func IsTelegramIdAlreadyTaken(telegramId string) bool {
 	return DB.Unscoped().Where("telegram_id = ?", telegramId).Find(&User{}).RowsAffected == 1
+}
+
+func IsQQIdAlreadyTaken(qqId string) bool {
+	return DB.Unscoped().Where("qq_id = ?", qqId).Find(&User{}).RowsAffected == 1
+}
+
+func UpdateUserQQId(userId int, qqId string) error {
+	return DB.Model(&User{}).Where("id = ?", userId).Update("qq_id", qqId).Error
 }
 
 func ResetUserPasswordByEmail(email string, password string) error {

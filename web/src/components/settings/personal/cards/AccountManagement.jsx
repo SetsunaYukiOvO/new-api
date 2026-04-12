@@ -38,7 +38,7 @@ import {
   IconLock,
   IconDelete,
 } from '@douyinfe/semi-icons';
-import { SiTelegram, SiWechat, SiLinux, SiDiscord } from 'react-icons/si';
+import { SiTelegram, SiWechat, SiLinux, SiDiscord, SiTencentqq } from 'react-icons/si';
 import { UserPlus, ShieldCheck } from 'lucide-react';
 import TelegramLoginButton from 'react-telegram-login';
 import {
@@ -53,6 +53,7 @@ import {
   getOAuthProviderIcon,
 } from '../../../../helpers';
 import TwoFASetting from '../components/TwoFASetting';
+import QQBindModal from '../modals/QQBindModal';
 
 const AccountManagement = ({
   t,
@@ -99,6 +100,7 @@ const AccountManagement = ({
   const isBound = (accountId) => Boolean(accountId);
   const [showTelegramBindModal, setShowTelegramBindModal] =
     React.useState(false);
+  const [showQQBindModal, setShowQQBindModal] = React.useState(false);
   const [customOAuthBindings, setCustomOAuthBindings] = React.useState([]);
   const [customOAuthLoading, setCustomOAuthLoading] = React.useState({});
 
@@ -517,6 +519,64 @@ const AccountManagement = ({
                 </div>
               </Card>
 
+              {/* QQ绑定 */}
+              <Card className='!rounded-xl'>
+                <div className='flex items-center justify-between gap-3'>
+                  <div className='flex items-center flex-1 min-w-0'>
+                    <div className='w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center mr-3 flex-shrink-0'>
+                      <SiTencentqq
+                        size={20}
+                        className='text-slate-600 dark:text-slate-300'
+                      />
+                    </div>
+                    <div className='flex-1 min-w-0'>
+                      <div className='font-medium text-gray-900'>
+                        {t('QQ')}
+                      </div>
+                      <div className='text-sm text-gray-500 truncate'>
+                        {renderAccountInfo(
+                          userState.user?.qq_id,
+                          t('QQ号'),
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex-shrink-0'>
+                    {isBound(userState.user?.qq_id) ? (
+                      <Button
+                        type='danger'
+                        theme='outline'
+                        size='small'
+                        onClick={async () => {
+                          try {
+                            const res = await API.post('/api/user/qq_bind/unbind');
+                            if (res.data.success) {
+                              showSuccess(t('QQ解绑成功'));
+                              window.location.reload();
+                            } else {
+                              showError(res.data.message);
+                            }
+                          } catch (e) {
+                            showError(t('解绑失败'));
+                          }
+                        }}
+                      >
+                        {t('解绑')}
+                      </Button>
+                    ) : (
+                      <Button
+                        type='primary'
+                        theme='outline'
+                        size='small'
+                        onClick={() => setShowQQBindModal(true)}
+                      >
+                        {t('绑定')}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </Card>
+
               {/* 自定义 OAuth 提供商绑定 */}
               {status.custom_oauth_providers &&
                 status.custom_oauth_providers.map((provider) => {
@@ -767,6 +827,13 @@ const AccountManagement = ({
           </div>
         </TabPane>
       </Tabs>
+
+      <QQBindModal
+        t={t}
+        visible={showQQBindModal}
+        onClose={() => setShowQQBindModal(false)}
+        onSuccess={() => window.location.reload()}
+      />
     </Card>
   );
 };

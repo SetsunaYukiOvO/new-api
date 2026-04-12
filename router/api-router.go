@@ -108,6 +108,11 @@ func SetApiRouter(router *gin.Engine) {
 				// Custom OAuth bindings
 				selfRoute.GET("/oauth/bindings", controller.GetUserOAuthBindings)
 				selfRoute.DELETE("/oauth/bindings/:provider_id", controller.UnbindCustomOAuth)
+
+				// QQ binding via signature verification
+				selfRoute.POST("/qq_bind/code", middleware.CriticalRateLimit(), controller.QQBindGenerateCode)
+				selfRoute.POST("/qq_bind/verify", middleware.CriticalRateLimit(), controller.QQBindVerify)
+				selfRoute.POST("/qq_bind/unbind", controller.QQUnbind)
 			}
 
 			adminRoute := userRoute.Group("/")
