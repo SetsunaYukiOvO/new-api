@@ -41,6 +41,7 @@ export default function SettingsCreditLimit(props) {
     QQWhitelist: '',
     QQWhitelistQuota: '',
     QQUnbindDisabled: false,
+    UapisApiKey: '',
   });
   const refForm = useRef();
   const [inputsRow, setInputsRow] = useState(inputs);
@@ -245,6 +246,23 @@ export default function SettingsCreditLimit(props) {
                   }
                 />
               </Col>
+              <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+                <Form.Input
+                  label={t('Uapis API Key')}
+                  field={'UapisApiKey'}
+                  extraText={t('uapis.cn 的 API Key，用于QQ信息查询，不填则使用免费额度（有频率限制）')}
+                  placeholder={'Bearer key'}
+                  mode='password'
+                  onChange={(value) =>
+                    setInputs({
+                      ...inputs,
+                      UapisApiKey: value,
+                    })
+                  }
+                />
+              </Col>
+            </Row>
+            <Row gutter={16}>
               <Col xs={24} sm={12} md={8} lg={8} xl={8}>
                 <Form.InputNumber
                   label={t('白名单赠送额度')}

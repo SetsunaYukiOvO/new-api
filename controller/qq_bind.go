@@ -184,10 +184,21 @@ func QQBindVerify(c *gin.Context) {
 		return
 	}
 
-	// Call uapis.cn API to get QQ user info and check signature
+	// Call uapis.cn API to get QQ user info and check nickname
 	client := http.Client{Timeout: 10 * time.Second}
 	apiURL := fmt.Sprintf("https://uapis.cn/api/v1/social/qq/userinfo?qq=%s", req.QQNumber)
-	resp, err := client.Get(apiURL)
+	httpReq, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "查询QQ信息失败，请稍后重试",
+		})
+		return
+	}
+	if common.UapisApiKey != "" {
+		httpReq.Header.Set("Authorization", "Bearer "+common.UapisApiKey)
+	}
+	resp, err := client.Do(httpReq)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
