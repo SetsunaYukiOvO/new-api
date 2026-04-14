@@ -2032,6 +2032,7 @@
     "此操作将启用用户账户": "Cette opération activera le compte utilisateur",
     "此操作将提升用户的权限级别": "Cette opération augmentera le niveau de permission de l'utilisateur",
     "此操作将禁用用户账户": "Cette opération désactivera le compte utilisateur",
+    "同时封禁邀请人": "Bannir également l'inviteur",
     "此操作将禁用该用户当前的两步验证配置，下次登录将不再强制输入验证码，直到用户重新启用。": "Cela désactivera la configuration actuelle de l'authentification à deux facteurs de l'utilisateur. Aucun code de vérification ne sera requis jusqu'à ce qu'il la réactive.",
     "此操作将解绑用户当前的 Passkey，下次登录需要重新注册。": "Cela détachera le Passkey actuel de l'utilisateur. Il devra se réenregistrer lors de sa prochaine connexion.",
     "此操作将降低用户的权限级别": "Cette opération abaissera le niveau de permission de l'utilisateur",

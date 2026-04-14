@@ -2049,6 +2049,7 @@
     "此操作将启用用户账户": "Thao tác này sẽ kích hoạt tài khoản người dùng",
     "此操作将提升用户的权限级别": "Thao tác này sẽ nâng cấp quyền hạn của người dùng",
     "此操作将禁用用户账户": "Thao tác này sẽ vô hiệu hóa tài khoản người dùng",
+    "同时封禁邀请人": "Đồng thời cấm người mời",
     "此操作将禁用该用户当前的两步验证配置，下次登录将不再强制输入验证码，直到用户重新启用。": "Thao tác này sẽ vô hiệu hóa cấu hình xác thực hai yếu tố hiện tại của người dùng. Lần đăng nhập tiếp theo sẽ không yêu cầu mã xác minh cho đến khi người dùng bật lại.",
     "此操作将解绑用户当前的 Passkey，下次登录需要重新注册。": "Thao tác này sẽ hủy liên kết Passkey hiện tại của người dùng. Họ sẽ cần đăng ký lại vào lần đăng nhập tiếp theo.",
     "此操作将降低用户的权限级别": "Thao tác này sẽ giảm cấp quyền hạn của người dùng",

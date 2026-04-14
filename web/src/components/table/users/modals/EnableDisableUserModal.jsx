@@ -17,8 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React from 'react';
-import { Modal } from '@douyinfe/semi-ui';
+import React, { useState, useEffect } from 'react';
+import { Modal, Checkbox } from '@douyinfe/semi-ui';
 
 const EnableDisableUserModal = ({
   visible,
@@ -29,16 +29,39 @@ const EnableDisableUserModal = ({
   t,
 }) => {
   const isDisable = action === 'disable';
+  const [banInviter, setBanInviter] = useState(false);
+
+  useEffect(() => {
+    if (visible) {
+      setBanInviter(false);
+    }
+  }, [visible]);
+
+  const handleOk = () => {
+    onConfirm({ banInviter });
+  };
 
   return (
     <Modal
       title={isDisable ? t('确定要禁用此用户吗？') : t('确定要启用此用户吗？')}
       visible={visible}
       onCancel={onCancel}
-      onOk={onConfirm}
+      onOk={handleOk}
       type='warning'
     >
-      {isDisable ? t('此操作将禁用用户账户') : t('此操作将启用用户账户')}
+      <div>
+        {isDisable ? t('此操作将禁用用户账户') : t('此操作将启用用户账户')}
+      </div>
+      {isDisable && user?.inviter_id > 0 && (
+        <div style={{ marginTop: 12 }}>
+          <Checkbox
+            checked={banInviter}
+            onChange={(e) => setBanInviter(e.target.checked)}
+          >
+            {t('同时封禁邀请人')} (ID: {user.inviter_id})
+          </Checkbox>
+        </div>
+      )}
     </Modal>
   );
 };

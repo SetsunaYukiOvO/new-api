@@ -2051,6 +2051,7 @@
     "此操作将启用用户账户": "This operation will enable the user account",
     "此操作将提升用户的权限级别": "This operation will elevate the user's permission level",
     "此操作将禁用用户账户": "This operation will disable the user account",
+    "同时封禁邀请人": "Also ban the inviter",
     "此操作将禁用该用户当前的两步验证配置，下次登录将不再强制输入验证码，直到用户重新启用。": "This will disable the user's current two-factor setup. No verification code will be required until they enable it again.",
     "此操作将解绑用户当前的 Passkey，下次登录需要重新注册。": "This will detach the user's current Passkey. They will need to register again on next login.",
     "此操作将降低用户的权限级别": "This operation will reduce the user's permission level",

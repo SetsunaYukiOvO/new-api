@@ -321,6 +321,11 @@ export const getUsersColumns = ({
       render: (text, record) => renderUsername(text, record),
     },
     {
+      title: 'QQ',
+      dataIndex: 'qq_id',
+      render: (text) => text || '-',
+    },
+    {
       title: t('状态'),
       dataIndex: 'info',
       render: (text, record, index) =>

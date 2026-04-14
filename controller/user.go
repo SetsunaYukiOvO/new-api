@@ -844,8 +844,9 @@ func CreateUser(c *gin.Context) {
 }
 
 type ManageRequest struct {
-	Id     int    `json:"id"`
-	Action string `json:"action"`
+	Id        int    `json:"id"`
+	Action    string `json:"action"`
+	BanInviter bool  `json:"ban_inviter"`
 }
 
 // ManageUser Only admin user can do this
@@ -918,14 +919,28 @@ func ManageUser(c *gin.Context) {
 		common.ApiError(c, err)
 		return
 	}
+
+	// 连坐：封禁时同时封禁邀请人
+	bannedInviterId := 0
+	if req.Action == "disable" && req.BanInviter && user.InviterId != 0 {
+		inviter, err := model.GetUserById(user.InviterId, false)
+		if err == nil && inviter.Role != common.RoleRootUser && inviter.Status != common.UserStatusDisabled {
+			inviter.Status = common.UserStatusDisabled
+			if err := inviter.Update(false); err == nil {
+				bannedInviterId = inviter.Id
+			}
+		}
+	}
+
 	clearUser := model.User{
 		Role:   user.Role,
 		Status: user.Status,
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "",
-		"data":    clearUser,
+		"success":           true,
+		"message":           "",
+		"data":              clearUser,
+		"banned_inviter_id": bannedInviterId,
 	})
 	return
 }

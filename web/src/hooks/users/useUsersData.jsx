@@ -121,19 +121,21 @@ export const useUsersData = () => {
   };
 
   // Manage user operations (promote, demote, enable, disable, delete)
-  const manageUser = async (userId, action, record) => {
+  const manageUser = async (userId, action, record, extraParams = {}) => {
     // Trigger loading state to force table re-render
     setLoading(true);
 
     const res = await API.post('/api/user/manage', {
       id: userId,
       action,
+      ...extraParams,
     });
 
     const { success, message } = res.data;
     if (success) {
       showSuccess(t('操作成功完成！'));
       const user = res.data.data;
+      const bannedInviterId = res.data.banned_inviter_id;
 
       // Create a new array and new object to ensure React detects changes
       const newUsers = users.map((u) => {
@@ -142,6 +144,10 @@ export const useUsersData = () => {
             return { ...u, DeletedAt: new Date() };
           }
           return { ...u, status: user.status, role: user.role };
+        }
+        // 连坐：同时更新被封禁的邀请人状态
+        if (bannedInviterId && u.id === bannedInviterId) {
+          return { ...u, status: 2 };
         }
         return u;
       });
